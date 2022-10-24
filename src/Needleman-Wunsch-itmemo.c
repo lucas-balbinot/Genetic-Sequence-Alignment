@@ -1,9 +1,7 @@
 /*
  * POSSIBLE IMPROVEMENT : the inner loop being the smaller array
  */
-
-
-#include "Globals.h" /* have all the costs definitions */
+#include "Needleman-Wunsch-itmemo.h"
 
 #include <stdio.h>  
 #include <stdlib.h> 
@@ -22,7 +20,13 @@ long EditDistance_NW_It(char* A, size_t lengthA, char* B, size_t lengthB) {
 
     // creates the tables of length
     // the +1 to take deletions and insertions into account
-    long edit_dist[lengthA+1][lengthB+1] = {0};
+    // simulates long edit_dist[lengthA+1][lengthB+1] = {0};
+    long** edit_dist = (long**)malloc( (lengthA+1) * sizeof(long*));
+    for(int i=0; i<lengthB; i++) {
+        edit_dist[i] = (long*)malloc( (lengthB+1) * sizeof(long));
+        edit_dist[i] = 0;
+    }
+
     // rows and cols to ignore the chars that are not bases
     int row = 1, col = 1;
     // just insertions and deletions for the first row and column
@@ -35,14 +39,14 @@ long EditDistance_NW_It(char* A, size_t lengthA, char* B, size_t lengthB) {
             col++;
             // otherwise, don't add anything to the value
         }
-            
-        
+
+    }
+    for(int i=1; i<lengthB+1; i++) {
         // for the column
         if(isBase(B[i])) {
             edit_dist[row][0] = INSERTION_COST * i;
             row++;
         }
-
     }
 
     // the evaluation loop
@@ -60,25 +64,25 @@ long EditDistance_NW_It(char* A, size_t lengthA, char* B, size_t lengthB) {
                                 SUBSTITUTION_UNKNOWN_COST : 
                                 ( isSameBase(A[i], B[i]) ? 0 : SUBSTITUTION_COST )
                             + edit_dist[row-1][col-1];
-            { 
-                long cas2 = INSERTION_COST + edit_dist[row][col-1] ;      
-                if (cas2 < min) min = cas2 ;
-            }
-            { 
-                long cas3 = INSERTION_COST + edit_dist[row-1][col];      
-                if (cas3 < min) min = cas3 ; 
-            }
-            // the value is updated with the min
-            edit_dist[row][col] = min;
+                { 
+                    long cas2 = INSERTION_COST + edit_dist[row][col-1] ;      
+                    if (cas2 < min) min = cas2 ;
+                }
+                { 
+                    long cas3 = INSERTION_COST + edit_dist[row-1][col];      
+                    if (cas3 < min) min = cas3 ; 
+                }
+                // the value is updated with the min
+                edit_dist[row][col] = min;
 
-            // update column count
-            col++;
+                // update column count
+                col++;
             }
+            // update row count
+            row++;
         }
-        // update row count
-        row++;
     }
 
-    return edit_dist[row][col]
+    return edit_dist[row][col];
 
 }
