@@ -1,0 +1,90 @@
+\hypertarget{Needleman-Wunsch-recmemo_8c}{}\doxysection{src/\+Needleman-\/\+Wunsch-\/recmemo.c File Reference}
+\label{Needleman-Wunsch-recmemo_8c}\index{src/Needleman-\/Wunsch-\/recmemo.c@{src/Needleman-\/Wunsch-\/recmemo.c}}
+
+
+recursive implementation with memoization of Needleman-\/\+Wunsch global alignment algorithm that computes the distance between two genetic sequences  
+
+
+{\ttfamily \#include \char`\"{}Needleman-\/\+Wunsch-\/recmemo.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}characters\+\_\+to\+\_\+base.\+h\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structNW__MemoContext}{NW\+\_\+\+Memo\+Context}}
+\begin{DoxyCompactList}\small\item\em data for memoization of recursive Needleman-\/\+Wunsch algorithm \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{Needleman-Wunsch-recmemo_8c_aeb8f8334c1df83ec03c75656ba679336}\label{Needleman-Wunsch-recmemo_8c_aeb8f8334c1df83ec03c75656ba679336}} 
+\#define {\bfseries NOT\+\_\+\+YET\+\_\+\+COMPUTED}~-\/1L
+\begin{DoxyCompactList}\small\item\em default value for memoization of minimal distance (defined as an impossible value for a distance, -\/1). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+long \mbox{\hyperlink{Needleman-Wunsch-recmemo_8c_ab0204839d4d469f6691334984f67b84b}{Edit\+Distance\+\_\+\+NW\+\_\+\+Rec}} (char $\ast$A, size\+\_\+t lengthA, char $\ast$B, size\+\_\+t lengthB)
+\begin{DoxyCompactList}\small\item\em computes the edit distance between A\mbox{[}0 .. length\+A-\/1\mbox{]} and B\mbox{[}0 .. length\+B-\/1\mbox{]} \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+recursive implementation with memoization of Needleman-\/\+Wunsch global alignment algorithm that computes the distance between two genetic sequences 
+
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+03/10/2022 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Jean-\/\+Louis Roch (Ensimag, Grenoble-\/\+INP -\/ University Grenoble-\/\+Alpes) \href{mailto:jean-louis.roch@grenoble-inp.fr}{\texttt{ jean-\/louis.\+roch@grenoble-\/inp.\+fr}}
+\end{DoxyAuthor}
+Documentation\+: see \mbox{\hyperlink{Needleman-Wunsch-recmemo_8h}{Needleman-\/\+Wunsch-\/recmemo.\+h}} Costs of basic base opertaions (SUBSTITUTION\+\_\+\+COST, SUBSTITUTION\+\_\+\+UNKNOWN\+\_\+\+COST, INSERTION\+\_\+\+COST) are defined in \mbox{\hyperlink{Needleman-Wunsch-recmemo_8h}{Needleman-\/\+Wunsch-\/recmemo.\+h}} 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{Needleman-Wunsch-recmemo_8c_ab0204839d4d469f6691334984f67b84b}\label{Needleman-Wunsch-recmemo_8c_ab0204839d4d469f6691334984f67b84b}} 
+\index{Needleman-\/Wunsch-\/recmemo.c@{Needleman-\/Wunsch-\/recmemo.c}!EditDistance\_NW\_Rec@{EditDistance\_NW\_Rec}}
+\index{EditDistance\_NW\_Rec@{EditDistance\_NW\_Rec}!Needleman-\/Wunsch-\/recmemo.c@{Needleman-\/Wunsch-\/recmemo.c}}
+\doxysubsubsection{\texorpdfstring{EditDistance\_NW\_Rec()}{EditDistance\_NW\_Rec()}}
+{\footnotesize\ttfamily long Edit\+Distance\+\_\+\+NW\+\_\+\+Rec (\begin{DoxyParamCaption}\item[{char $\ast$}]{A,  }\item[{size\+\_\+t}]{lengthA,  }\item[{char $\ast$}]{B,  }\item[{size\+\_\+t}]{lengthB }\end{DoxyParamCaption})}
+
+
+
+computes the edit distance between A\mbox{[}0 .. length\+A-\/1\mbox{]} and B\mbox{[}0 .. length\+B-\/1\mbox{]} 
+
+
+\begin{DoxyParams}{Parameters}
+{\em A} & \+: array of char represneting a genetic sequence A \\
+\hline
+{\em lengthA} & \+: number of elements in A \\
+\hline
+{\em B} & \+: array of char represneting a genetic sequence B \\
+\hline
+{\em lengthB} & \+: number of elements in B \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: edit distance between A and B \}
+\end{DoxyReturn}
+edit\+Distance\+\_\+\+It\+Memo is a memoized recursive immplementatioin of Needleman-\/\+Wunsch algorithm. It allocates the data structure for memoization table and fills in the memoization table.
+
+If lengthA \texorpdfstring{$<$}{<} lengthB, the sequences A and B are swapped.
+
+
+\begin{DoxyParams}{Parameters}
+{\em A} & \+: array of char represneting a genetic sequence A \\
+\hline
+{\em lengthA} & \+: number of elements in A \\
+\hline
+{\em B} & \+: array of char represneting a genetic sequence B \\
+\hline
+{\em lengthB} & \+: number of elements in B \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: edit distance between A and B \}
+\end{DoxyReturn}
+edit\+Distance\+\_\+\+Rec\+Memo is a memoized recursive immplementatioin of Needleman-\/\+Wunsch algorithm. It allocates the data structure for memoization table and calls the internal recursive function \+\_\+edit\+Distance\+\_\+memo that fills in the memoization table.
+
+If lengthA \texorpdfstring{$<$}{<} lengthB, the sequences A and B are swapped. 

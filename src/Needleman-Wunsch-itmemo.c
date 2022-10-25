@@ -1,6 +1,3 @@
-/*
- * POSSIBLE IMPROVEMENT : the inner loop being the smaller array
- */
 #include "Needleman-Wunsch-itmemo.h"
 
 #include <stdio.h>  
@@ -16,46 +13,73 @@
  */
 long EditDistance_NW_It(char* A, size_t lengthA, char* B, size_t lengthB) {
 
+    if(lengthA<lengthB) {
+        char *aux = B;
+        B = A;
+        A = aux;
+
+        size_t aux_size = lengthA;
+        lengthA = lengthB;
+        lengthB = aux_size;
+    }
+
     _init_base_match();
 
     // creates the tables of length
     // the +1 to take deletions and insertions into account
     // simulates long edit_dist[lengthA+1][lengthB+1] = {0};
+    // lengthA + 1 = number of rows
     long** edit_dist = (long**)malloc( (lengthA+1) * sizeof(long*));
-    for(int i=0; i<lengthB; i++) {
+    for(int i=0; i<lengthB+1; i++) {
+        // lengthB + 1 = number os columns
         edit_dist[i] = (long*)malloc( (lengthB+1) * sizeof(long));
-        edit_dist[i] = 0;
+        for(int j=0; j<lengthB+1; j++)
+            edit_dist[i][j] = 0;
     }
 
-    // rows and cols to ignore the chars that are not bases
+    //rows and cols to ignore the chars that are not bases
     int row = 1, col = 1;
     // just insertions and deletions for the first row and column
     for(int i=1; i<lengthA+1; i++) {
-
         // for the row
-        if(isBase(A[i])) {
+        if(isBase(A[i-1])) {
             // if it is a base, calculate the cost of insertion
-            edit_dist[0][col] = INSERTION_COST * i;
+            edit_dist[0][col] = INSERTION_COST * col;
             col++;
             // otherwise, don't add anything to the value
         }
-
     }
     for(int i=1; i<lengthB+1; i++) {
         // for the column
-        if(isBase(B[i])) {
-            edit_dist[row][0] = INSERTION_COST * i;
+        if(isBase(B[i-1])) {
+            //printf("%c", B[i-1]);
+            edit_dist[row][0] = INSERTION_COST * row;
             row++;
+            //printf("row[%d]%zu\n",i, row);
         }
     }
+
+    int totalCols = col - 1;
+    int totalRows = row - 1;
+
+
+    printf("row: %zu\ncol: %zu\n", totalRows, totalCols);
+
+    for(int i=0; i<totalRows;i++) {
+        for(int j=0; j<totalCols; j++) {
+            printf("%zu ", edit_dist[i][j]);
+        }
+        printf("\n");
+    }
+
 
     // the evaluation loop
     // starts in 1 to make sense of the table organization
     // as the index 0,0 doesn't represent a char
     long delta;
-    row = 1;
+    col = 1;
     for(int i=1; i<lengthA+1; i++) {
-        col = 1;
+        row = 1;
         for(int j=1; j<lengthB+1; j++) {
             // test if it is indeed a base
             if(isBase(A[i]) && isBase(B[j])) {
@@ -74,15 +98,25 @@ long EditDistance_NW_It(char* A, size_t lengthA, char* B, size_t lengthB) {
                 }
                 // the value is updated with the min
                 edit_dist[row][col] = min;
-
-                // update column count
-                col++;
+                
+                // update row count
+                row++;
             }
-            // update row count
-            row++;
+        }
+        if(isBase(A[i])) {
+            // update column count
+            col++;
         }
     }
 
-    return edit_dist[row][col];
+    printf("row: %zu\ncol: %zu\n", totalRows, totalCols);
 
+    for(int i=0; i<totalRows;i++) {
+        for(int j=0; j<totalCols; j++) {
+            printf("%zu ", edit_dist[i][j]);
+        }
+        printf("\n");
+    }
+
+    return edit_dist[totalRows-1][totalCols-1];
 }

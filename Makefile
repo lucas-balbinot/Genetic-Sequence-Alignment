@@ -28,12 +28,15 @@ report: $(PDF)
 doc: $(DOCDIR)/index.html
 
 
-$(BINDIR)/distanceEdition: $(SRCDIR)/distanceEdition.c $(BINDIR)/Needleman-Wunsch-recmemo.o 
-	$(CC) $(OPT) -I$(SRCDIR) -o $(BINDIR)/distanceEdition $(BINDIR)/Needleman-Wunsch-recmemo.o $(SRCDIR)/distanceEdition.c 
+$(BINDIR)/distanceEdition: $(SRCDIR)/distanceEdition.c $(BINDIR)/Needleman-Wunsch-itmemo.o
+	$(CC) $(OPT) -I$(SRCDIR) -o $(BINDIR)/distanceEdition $(BINDIR)/Needleman-Wunsch-itmemo.o $(SRCDIR)/distanceEdition.c 
 
 $(BINDIR)/Needleman-Wunsch-recmemo.o: $(SRCDIR)/Needleman-Wunsch-recmemo.h $(SRCDIR)/Needleman-Wunsch-recmemo.c $(SRCDIR)/characters_to_base.h
 	$(CC) $(OPT) -I$(SRCDIR) -c  -o $(BINDIR)/Needleman-Wunsch-recmemo.o $(SRCDIR)/Needleman-Wunsch-recmemo.c
 	
+$(BINDIR)/Needleman-Wunsch-itmemo.o: $(SRCDIR)/Needleman-Wunsch-itmemo.h $(SRCDIR)/Needleman-Wunsch-itmemo.c $(SRCDIR)/characters_to_base.h
+	$(CC) $(OPT) -I$(SRCDIR) -c  -o $(BINDIR)/Needleman-Wunsch-itmemo.o $(SRCDIR)/Needleman-Wunsch-itmemo.c
+
 $(BINDIR)/extract-fasta-sequences-size: $(SRCDIR)/extract-fasta-sequences-size.c
 	$(CC) $(OPT) -I$(SRCDIR) -o $(BINDIR)/extract-fasta-sequences-size $(SRCDIR)/extract-fasta-sequences-size.c
 

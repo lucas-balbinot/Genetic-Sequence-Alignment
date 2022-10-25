@@ -44,7 +44,7 @@ EXAMPLE
  * \brief Primitives pour mapper en mémoire virtuelle une sous-séquence d'un fichier de caractères
  */
 
-#include "Needleman-Wunsch-recmemo.h" // Recursive implementation of NeedlemanWunsch with memoization
+// #include "Needleman-Wunsch-recmemo.h" // Recursive implementation of NeedlemanWunsch with memoization
 #include "Needleman-Wunsch-itmemo.h"
 
 
@@ -181,7 +181,6 @@ int main(int argc, char *argv[])
       }
    } 
 
-     
    long res = EditDistance_NW_It(seq[0], length[0], seq[1], length[1]);
 
    {  for( int i = 0; i < 2; ++i ) 
