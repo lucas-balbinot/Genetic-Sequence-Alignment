@@ -8,7 +8,7 @@
 #include "characters_to_base.h" /* mapping from char to base */
 
 /* EditDistance_NW_It : It is the main function, performs the calculations
- * in an interative manner. It dones so by filling up a table that represents
+ * in an iterative manner. It dones so by filling up a table that represents
  * the insertions, deletions or substitions, giving the costs of .h
  */
 long EditDistance_NW_It(char* A, size_t lengthA, char* B, size_t lengthB) {
