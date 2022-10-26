@@ -1,0 +1,79 @@
+\hypertarget{characters__to__base_8h_source}{}\doxysection{characters\+\_\+to\+\_\+base.\+h}
+\label{characters__to__base_8h_source}\index{src/characters\_to\_base.h@{src/characters\_to\_base.h}}
+\mbox{\hyperlink{characters__to__base_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 }
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#ifndef \_\_CHARACTERS\_TO\_BASE\_h\_\_}}
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#define \_\_CHARACTERS\_TO\_BASE\_h\_\_}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{comment}{/**********************************************/}}
+\DoxyCodeLine{16 \textcolor{comment}{/* Matching between chars and bases }}
+\DoxyCodeLine{17 \textcolor{comment}{*/}}
+\DoxyCodeLine{27 \textcolor{keyword}{enum} \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340}{Base}} }
+\DoxyCodeLine{28 \{ }
+\DoxyCodeLine{29    \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a6414b08941ea54b30046706808e5d6c3}{SKIP\_BASE}}=0,    }
+\DoxyCodeLine{30    \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a1fe999cf860573cb6733179518ea4675}{ADENINE}},  }
+\DoxyCodeLine{31    \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a14cfd5eccbc49ed1195325a31abb197a}{CYTOSINE}},    }
+\DoxyCodeLine{32    \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a6a884c84a6ff4bb9f80a9bf1fea3142d}{GUANINE}},  }
+\DoxyCodeLine{33    \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a89b99830a200e3cfdc98defdee8089ef}{THYMINE}},  }
+\DoxyCodeLine{34    \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a0e7cd6723764071d3e45bd6da83aba3d}{URACILE}},  }
+\DoxyCodeLine{35    \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340ac5e300f157b9edd70bc5e93df509fd49}{UNKOWN\_BASE}}   }
+\DoxyCodeLine{36 \} ;}
+\DoxyCodeLine{37 }
+\DoxyCodeLine{42 \textcolor{keyword}{static} \textcolor{keyword}{enum} \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340}{Base}}  \_base\_match[256] = \{ \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a6414b08941ea54b30046706808e5d6c3}{SKIP\_BASE}} \}; \textcolor{comment}{/* initially all chars are ignored */}}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{50 \textcolor{keyword}{static} \textcolor{keywordtype}{void}  \_init\_base\_match() \textcolor{comment}{/* initialisation of \_base\_match array for correspondence from char to base */}}
+\DoxyCodeLine{51 \{ }
+\DoxyCodeLine{52    \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} c = 0; c < 256; ++c) \_base\_match[c] = \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a6414b08941ea54b30046706808e5d6c3}{SKIP\_BASE}} ;}
+\DoxyCodeLine{53    \_base\_match[\textcolor{charliteral}{'a'}] = \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a1fe999cf860573cb6733179518ea4675}{ADENINE}} ;}
+\DoxyCodeLine{54    \_base\_match[\textcolor{charliteral}{'A'}] = \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a1fe999cf860573cb6733179518ea4675}{ADENINE}} ;}
+\DoxyCodeLine{55    \_base\_match[\textcolor{charliteral}{'c'}] = \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a14cfd5eccbc49ed1195325a31abb197a}{CYTOSINE}} ;}
+\DoxyCodeLine{56    \_base\_match[\textcolor{charliteral}{'C'}] = \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a14cfd5eccbc49ed1195325a31abb197a}{CYTOSINE}} ;}
+\DoxyCodeLine{57    \_base\_match[\textcolor{charliteral}{'g'}] = \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a6a884c84a6ff4bb9f80a9bf1fea3142d}{GUANINE}} ;}
+\DoxyCodeLine{58    \_base\_match[\textcolor{charliteral}{'G'}] = \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a6a884c84a6ff4bb9f80a9bf1fea3142d}{GUANINE}} ;}
+\DoxyCodeLine{59    \_base\_match[\textcolor{charliteral}{'t'}] = \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a89b99830a200e3cfdc98defdee8089ef}{THYMINE}} ;}
+\DoxyCodeLine{60    \_base\_match[\textcolor{charliteral}{'T'}] = \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a89b99830a200e3cfdc98defdee8089ef}{THYMINE}} ;}
+\DoxyCodeLine{61    \_base\_match[\textcolor{charliteral}{'u'}] = \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a0e7cd6723764071d3e45bd6da83aba3d}{URACILE}} ;}
+\DoxyCodeLine{62    \_base\_match[\textcolor{charliteral}{'U'}] = \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a0e7cd6723764071d3e45bd6da83aba3d}{URACILE}} ;}
+\DoxyCodeLine{63    \_base\_match[\textcolor{charliteral}{'n'}] = \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340ac5e300f157b9edd70bc5e93df509fd49}{UNKOWN\_BASE}} ;}
+\DoxyCodeLine{64    \_base\_match[\textcolor{charliteral}{'N'}] = \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340ac5e300f157b9edd70bc5e93df509fd49}{UNKOWN\_BASE}} ;}
+\DoxyCodeLine{65 \}}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67 }
+\DoxyCodeLine{72 \textcolor{preprocessor}{\#define CharToBase(c)   ( \_base\_match[c] )}}
+\DoxyCodeLine{73 }
+\DoxyCodeLine{79 \textcolor{preprocessor}{\#define isBase(c)   ( \_base\_match[c] != SKIP\_BASE )}}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{86 \textcolor{preprocessor}{\#define isUnknownBase(c)    ( \_base\_match[c] == UNKOWN\_BASE )}}
+\DoxyCodeLine{87 }
+\DoxyCodeLine{92 \textcolor{preprocessor}{\#define isSameBase(a,b) ( \_base\_match[a] == \_base\_match[b] )}}
+\DoxyCodeLine{93 }
+\DoxyCodeLine{97 \textcolor{keyword}{enum} \mbox{\hyperlink{characters__to__base_8h_aa9352342298b7f6f0f806bed48735ffe}{BASE\_ERROR\_TREATMENT\_MODE}} \{ IGNORED = 0, WARNING = 1, ERROR=2  \} ;}
+\DoxyCodeLine{98 }
+\DoxyCodeLine{110 \textcolor{keywordtype}{void} \mbox{\hyperlink{characters__to__base_8h_aa8b34a60544c881a12ee80d33c82dc3b}{ManageBaseError}}(\textcolor{keywordtype}{char} c)}
+\DoxyCodeLine{111 \{ }
+\DoxyCodeLine{112 \textcolor{preprocessor}{   \#ifdef BASE\_ERROR\_TREATMENT}}
+\DoxyCodeLine{113    \{  \textcolor{keywordflow}{if} (\mbox{\hyperlink{characters__to__base_8h_a2a350cc3b9ac7baee35b29432230658c}{isBase}}(c)) return ; \textcolor{comment}{// no error}}
+\DoxyCodeLine{114       \textcolor{keywordflow}{if} (isspace(c)) return ; \textcolor{comment}{// \(\backslash\)n or \(\backslash\)t or ' ' etc are  ignored }}
+\DoxyCodeLine{115       \textcolor{keywordflow}{switch} ( BASE\_ERROR\_TREATMENT )}
+\DoxyCodeLine{116       \{  \textcolor{keywordflow}{case} BASE\_WARNING : }
+\DoxyCodeLine{117             fprintf(stderr, \textcolor{stringliteral}{"{}Warning: character \%c=0x\%xc not matching a base is skipped.\(\backslash\)n"{}}, c, c ) ;}
+\DoxyCodeLine{118             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{119          \textcolor{keywordflow}{case} BASE\_ERROR :}
+\DoxyCodeLine{120             fprintf(stderr, }
+\DoxyCodeLine{121                \textcolor{stringliteral}{"{}Error: character \%c=0x\%xc  not matching a base is skipped.\(\backslash\)n"{}}}
+\DoxyCodeLine{122                \textcolor{stringliteral}{"{}   Expected bases:A=0x\%xc, a=0x\%xc, C=0x\%xc, c=0x\%xc, G=0x\%xc, g=0x\%xc, T=0x\%xc, t=0x\%xc, U0x\%xc, u=0x\%xc\(\backslash\)n"{}},}
+\DoxyCodeLine{123                c, c, \textcolor{charliteral}{'A'}, \textcolor{charliteral}{'a'}, \textcolor{charliteral}{'C'}, \textcolor{charliteral}{'c'}, \textcolor{charliteral}{'G'}, \textcolor{charliteral}{'g'}, \textcolor{charliteral}{'T'}, \textcolor{charliteral}{'t'}, \textcolor{charliteral}{'U'}, \textcolor{charliteral}{'u'} }
+\DoxyCodeLine{124             ) ;}
+\DoxyCodeLine{125             exit(EXIT\_FAILURE) ;}
+\DoxyCodeLine{126          \textcolor{keywordflow}{default}: break ;}
+\DoxyCodeLine{127       \}}
+\DoxyCodeLine{128    \}}
+\DoxyCodeLine{129 \textcolor{preprocessor}{   \#endif}}
+\DoxyCodeLine{130    \textcolor{comment}{/* else no errors are managed */}}
+\DoxyCodeLine{131    \textcolor{keywordflow}{return};}
+\DoxyCodeLine{132 \} }
+\DoxyCodeLine{133 }
+\DoxyCodeLine{134 \textcolor{preprocessor}{\#endif }\textcolor{comment}{/* \_\_CHARACTERS\_TO\_BASE\_h\_\_ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}
