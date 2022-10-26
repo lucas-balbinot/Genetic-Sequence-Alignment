@@ -89,42 +89,51 @@ long EditDistance_CA(char* A, size_t lengthA, char* B, size_t lengthB) {
     int K = pow(Z/2, 0.5);
 
     // the 2 outer loops are the blocking parts
+    int mid_col, mid_row;
+
+    col = 1;
     for(int i=0; i<lengthA; i+=K) {
         int endA = (i+K < lengthA) ? i+K : lengthA;
+
+        row = 1;
         for(int j=0; j<lengthB; j+=K) {
             int endB = (j+K < lengthB) ? j+K : lengthB;
 
+            mid_col = col;
             // the 2 inner loops are the logic part
             for(int k=i; k<endA; k++) {
                 // if A[k] is not a base, no need to enter the loop
-                //if(!isBase(A[k])) continue;
+                if(!isBase(A[k])) continue;
 
+                mid_row = row;
                 for(int l=j; l<endB; l++) {
 
-                    printf("A[k]:%c | B[l]:%c | i:%d | j:%d | k:%d | l:%d\n",A[k],B[l],i,j,k,l);
+                    // printf("A[k]:%c | B[l]:%c | i:%d | j:%d | k:%d | l:%d\n",A[k],B[l],i,j,k,l);
 
                     if(isBase(A[k]) && isBase(B[l])) {
                         // initialization  with cas 1
                         long min = isUnknownBase(A[k]) ?  
                                         SUBSTITUTION_UNKNOWN_COST : 
                                         ( isSameBase(A[k], B[l]) ? 0 : SUBSTITUTION_COST )
-                                    + edit_dist[l+1-1][k+1-1];
+                                    + edit_dist[mid_row-1][mid_col-1];
                         {
-                            long cas2 = INSERTION_COST + edit_dist[l+1][k+1-1] ;      
+                            long cas2 = INSERTION_COST + edit_dist[mid_row][mid_col-1] ;      
                             if (cas2 < min) min = cas2 ;
                         }
                         { 
-                            long cas3 = INSERTION_COST + edit_dist[l+1-1][k+1];      
+                            long cas3 = INSERTION_COST + edit_dist[mid_row-1][mid_col];      
                             if (cas3 < min) min = cas3 ; 
                         }
                         // printf("  MIN: %d\n", min);
-                        edit_dist[l+1][k+1] = min;
-                    }  
+                        edit_dist[mid_row][mid_col] = min;
+                        mid_row++;
+                    }
                 }
+                if(isBase(A[k])) mid_col++;
             }
-
-
+            row = mid_row;
         }
+        col = mid_col;
     }
 
     // printf("row: %zu\ncol: %zu\n", totalRows, totalCols);
