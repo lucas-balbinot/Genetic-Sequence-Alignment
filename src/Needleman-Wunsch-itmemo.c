@@ -7,117 +7,111 @@
 
 #include "characters_to_base.h" /* mapping from char to base */
 
+/* Context of the memoization : passed to all recursive calls */
+/** \def NOT_YET_COMPUTED
+ * \brief default value for memoization of minimal distance (defined as an impossible value for a distance, -1).
+ */
+#define NOT_YET_COMPUTED -1L
+
+/** \struct NW_MemoContext
+ * \brief data for memoization of recursive Needleman-Wunsch algorithm 
+*/
+struct NW_MemoContext 
+{
+    char *X ; /*!< the longest genetic sequences */
+    char *Y ; /*!< the shortest genetic sequences */
+    size_t M; /*!< length of X */
+    size_t N; /*!< length of Y,  N <= M */
+    long **memo; /*!< memoization table to store memo[0..M][0..N] (including stopping conditions phi(M,j) and phi(i,N) */
+} ;
+
+
 /* EditDistance_NW_It : It is the main function, performs the calculations
  * in an iterative manner. It dones so by filling up a table that represents
  * the insertions, deletions or substitions, giving the costs of .h
  */
 long EditDistance_NW_It(char* A, size_t lengthA, char* B, size_t lengthB) {
 
-    if(lengthA<lengthB) {
-        char *aux = B;
-        B = A;
-        A = aux;
-
-        size_t aux_size = lengthA;
-        lengthA = lengthB;
-        lengthB = aux_size;
-    }
-
     _init_base_match();
-
-    // creates the tables of length
-    // the +1 to take deletions and insertions into account
-    // simulates long edit_dist[lengthA+1][lengthB+1] = {0};
-
-    // lengthA + 1 = number of rows
-    long** edit_dist = (long**)malloc( (lengthB+1) * sizeof(long*));
-    for(int i=0; i<lengthA+1; i++) {
-        // lengthB + 1 = number os columns
-        edit_dist[i] = (long*)malloc( (lengthA+1) * sizeof(long));
-        for(int j=0; j<lengthA+1; j++)
-            edit_dist[i][j] = 0;
+    struct NW_MemoContext ctx;
+    if (lengthA >= lengthB) /* X is the longest sequence, Y the shortest */
+        {  ctx.X = A ;
+        ctx.M = lengthA ;
+        ctx.Y = B ;
+        ctx.N = lengthB ;
     }
-
-    //rows and cols to ignore the chars that are not bases
-    int row = 1, col = 1;
-    // just insertions and deletions for the first row and column
-    for(int i=1; i<lengthA+1; i++) {
-        // for the row
-        if(isBase(A[i-1])) {
-            // if it is a base, calculate the cost of insertion
-            edit_dist[0][col] = INSERTION_COST * col;
-            // printf("col[%d] -> %zu\n", col, edit_dist[0][col]);
-            col++;
-            // otherwise, don't add anything to the value
+    else
+    {  ctx.X = B ;
+        ctx.M = lengthB ;
+        ctx.Y = A ;
+        ctx.N = lengthA ;
+    }
+    size_t M = ctx.M ;
+    size_t N = ctx.N ;
+    
+    {  /* Allocation and initialization of ctx.memo to NOT_YET_COMPUTED*/
+        /* Note: memo is of size (N+1)*(M+1) but is stored as (M+1) distinct arrays each with (N+1) continuous elements 
+        * It would have been possible to allocate only one big array memezone of (M+1)*(N+1) elements 
+        * and then memo as an array of (M+1) pointers, the memo[i] being the address of memzone[i*(N+1)].
+        */ 
+        ctx.memo = (long **) malloc ( (M+1) * sizeof(long *)) ;
+        if (ctx.memo == NULL) { perror("EditDistance_NW_Rec: malloc of ctx_memo" ); exit(EXIT_FAILURE); }
+        for (int i=0; i <= M; ++i) 
+        {  ctx.memo[i] = (long*) malloc( (N+1) * sizeof(long));
+            if (ctx.memo[i] == NULL) { perror("EditDistance_NW_Rec: malloc of ctx_memo[i]" ); exit(EXIT_FAILURE); }
+            for (int j=0; j<=N; ++j) ctx.memo[i][j] = NOT_YET_COMPUTED ;
         }
     }
-    for(int i=1; i<lengthB+1; i++) {
-        // for the column
-        if(isBase(B[i-1])) {
-            //printf("%c", B[i-1]);
-            edit_dist[row][0] = INSERTION_COST * row;
-            // printf("row[%d] -> %zu\n", row, edit_dist[row][0]);
-            row++;
-        }
-    }
-
-    int totalCols = col - 1;
-    int totalRows = row - 1;
-
-    // printf("row: %zu\ncol: %zu\n", totalRows, totalCols);
-
-    // for(int i=0; i<totalRows+1;i++) {
-    //     for(int j=0; j<totalCols+1; j++) {
-    //         printf("%zu ", edit_dist[i][j]);
-    //     }
-    //     printf("\n");
-    // }
-
 
     // the evaluation loop
     // starts in 1 to make sense of the table organization
     // as the index 0,0 doesn't represent a char
-    long delta;
-    col = 1;
-    for(int i=0; i<lengthA; i++) {
-        row = 1;
-        for(int j=0; j<lengthB; j++) {
-            // test if it is indeed a base
-            if(isBase(A[i]) && isBase(B[j])) {
-                // initialization  with cas 1
-                long min = isUnknownBase(A[i]) ?  
-                                SUBSTITUTION_UNKNOWN_COST : 
-                                ( isSameBase(A[i], B[j]) ? 0 : SUBSTITUTION_COST )
-                            + edit_dist[row-1][col-1];
-                { 
-                    long cas2 = INSERTION_COST + edit_dist[row][col-1] ;      
-                    if (cas2 < min) min = cas2 ;
-                }
-                { 
-                    long cas3 = INSERTION_COST + edit_dist[row-1][col];      
-                    if (cas3 < min) min = cas3 ; 
-                }
-                // the value is updated with the min
-                edit_dist[row][col] = min;
-                
-                // update row count
-                row++;
+    for(int i=M; i>=0; i--) {
+        for(int j=N; j>=0; j--) {
+
+            long res ;
+            char Xi = ctx.X[i] ;
+            char Yj = ctx.Y[j] ;
+            if (i == ctx.M) /* Reach end of X */
+            {  if (j == ctx.N) res = 0;  /* Reach end of Y too */
+                else res = (isBase(Yj) ? INSERTION_COST : 0) + ctx.memo[i][j+1];
+                //+ EditDistance_NW_RecMemo(c, i, j+1) ;
             }
-        }
-        if(isBase(A[i])) {
-            // update column count
-            col++;
+            else if (j == ctx.N) /* Reach end of Y but not end of X */
+            {  res = (isBase(Xi) ? INSERTION_COST : 0) + ctx.memo[i+1][j];
+                //+ EditDistance_NW_RecMemo(c, i+1, j) ;
+            }
+            else if (! isBase(Xi))  /* skip ccharacter in Xi that is not a base */
+            {  ManageBaseError( Xi ) ;
+                res = ctx.memo[i+1][j];
+                //res = EditDistance_Rec_CO(c, i+1, j, K1, K2) ;
+            }
+            else if (! isBase(Yj))  /* skip ccharacter in Yj that is not a base */
+            {  ManageBaseError( Yj ) ;
+                res = ctx.memo[i][j+1];
+                // EditDistance_Rec_CO(c, i, j+1, K1, K2) ;
+            }
+            else  
+            {  /* Note that stopping conditions (i==M) and (j==N) are already stored in ctx.memo (cf EditDistance_NW_Rec) */ 
+                long min = /* initialization  with cas 1*/
+                        ( isUnknownBase(Xi) ?  SUBSTITUTION_UNKNOWN_COST 
+                                : ( isSameBase(Xi, Yj) ? 0 : SUBSTITUTION_COST ) 
+                        )
+                        + ctx.memo[i+1][j+1];
+                        //+ EditDistance_NW_RecMemo(c, i+1, j+1) ; 
+                { long cas2 = INSERTION_COST + ctx.memo[i+1][j];
+                    //+ EditDistance_NW_RecMemo(c, i+1, j) ;      
+                if (cas2 < min) min = cas2 ;
+                }
+                { long cas3 = INSERTION_COST + ctx.memo[i][j+1];
+                    //+ EditDistance_NW_RecMemo(c, i, j+1) ;      
+                if (cas3 < min) min = cas3 ; 
+                }
+                res = min ;
+            }
+            ctx.memo[i][j] = res;
         }
     }
 
-    // printf("row: %zu\ncol: %zu\n", totalRows, totalCols);
-
-    // for(int i=0; i<totalRows+1;i++) {
-    //     for(int j=0; j<totalCols+1; j++) {
-    //         printf("%zu ", edit_dist[i][j]);
-    //     }
-    //     printf("\n");
-    // }
-
-    return edit_dist[totalRows][totalCols];
+    return ctx.memo[0][0];
 }
