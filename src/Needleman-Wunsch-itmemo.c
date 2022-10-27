@@ -113,5 +113,12 @@ long EditDistance_NW_It(char* A, size_t lengthA, char* B, size_t lengthB) {
         }
     }
 
-    return ctx.memo[0][0];
+    long res = ctx.memo[0][0];
+
+    { /* Deallocation of ctx.memo */
+      for (int i=0; i <= M; ++i) free( ctx.memo[i] ) ;
+      free( ctx.memo ) ;
+    }
+
+   return res;
 }

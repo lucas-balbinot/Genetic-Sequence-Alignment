@@ -167,7 +167,6 @@ long EditDistance_CO(char* A, size_t lengthA, char* B, size_t lengthB)
 
    /* Compute phi(0,0) = ctx.memo[0][0] by calling the recursive function EditDistance_NW_RecMemo */
    long res = EditDistance_Rec_CO( &ctx, 0, 0, M, N ) ;
-
    { /* Deallocation of ctx.memo */
       for (int i=0; i <= M; ++i) free( ctx.memo[i] ) ;
       free( ctx.memo ) ;
