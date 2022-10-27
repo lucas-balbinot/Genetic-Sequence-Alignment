@@ -25,7 +25,7 @@
 
 #define Z 4096
 #define BLOCK_SIZE pow(Z/2, 0.5)
-#define S 4
+#define S 200
 
 /* Context of the memoization : passed to all recursive calls */
 /** \def NOT_YET_COMPUTED
@@ -66,7 +66,7 @@ static long EditDistance_Rec_CO(struct NW_MemoContext *c, size_t begin_1, size_t
         for(int i=end_1; i>=(int)begin_1; i--) {    
             for(int j=end_2; j>=(int)begin_2; j--) {
 
-                printf("i:%02d | j:%02d | I:%02d | J:%02d | K1:%02d | K2:%02d\n", i,j,begin_1,begin_2,end_1,end_2);
+                // printf("i:%02zu | j:%02zu | I:%02zu | J:%02zu | K1:%02zu | K2:%02zu\n", i,j,begin_1,begin_2,end_1,end_2);
 
                 long res ;
                 char Xi = c->X[i] ;
@@ -114,16 +114,15 @@ static long EditDistance_Rec_CO(struct NW_MemoContext *c, size_t begin_1, size_t
     }
     else {
         if(n_1>n_2){
-            printf("begin:%d, end:%d\n",begin_1,end_1);
-            EditDistance_Rec_CO(c, begin_1, (begin_1+end_1)/2, begin_2, end_2);
-            EditDistance_Rec_CO(c, (begin_1+end_2)/2, end_1, begin_2, end_2);
+            // printf("N1>N2 -> begin:%zu, end:%zu\n",begin_1,end_1);
+            EditDistance_Rec_CO(c, (begin_1+end_1)/2, begin_2, end_1, end_2);
+            EditDistance_Rec_CO(c, begin_1, begin_2, (begin_1+end_1)/2, end_2);
         }
         else {
-            printf("begin:%d, end:%d\n",begin_2,end_2);
-            EditDistance_Rec_CO(c, begin_1, end_1, begin_2, (begin_2+end_2)/2);
-            EditDistance_Rec_CO(c, begin_1, end_1, (begin_2+end_2)/2, end_2);
+            // printf("N2>N1 -> begin:%zu, end:%zu\n",begin_2,end_2);
+            EditDistance_Rec_CO(c, begin_1, (begin_2+end_2)/2, end_1, end_2);
+            EditDistance_Rec_CO(c, begin_1, begin_2,end_1, (begin_2+end_2)/2);
         }
-        return;
     }
 
     return c->memo[0][0];
@@ -166,10 +165,9 @@ long EditDistance_CO(char* A, size_t lengthA, char* B, size_t lengthB)
       }
    }    
 
-
    /* Compute phi(0,0) = ctx.memo[0][0] by calling the recursive function EditDistance_NW_RecMemo */
    long res = EditDistance_Rec_CO( &ctx, 0, 0, M, N ) ;
-    
+
    { /* Deallocation of ctx.memo */
       for (int i=0; i <= M; ++i) free( ctx.memo[i] ) ;
       free( ctx.memo ) ;

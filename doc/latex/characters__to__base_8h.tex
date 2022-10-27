@@ -9,16 +9,16 @@ mapping of characters to canonic ADN/\+ARN bases
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\Hypertarget{characters__to__base_8h_a787d6808f4f34b134b0707173a8ca048}\label{characters__to__base_8h_a787d6808f4f34b134b0707173a8ca048}} 
-\#define \mbox{\hyperlink{characters__to__base_8h_a787d6808f4f34b134b0707173a8ca048}{Char\+To\+Base}}(c)~( \+\_\+base\+\_\+match\mbox{[}c\mbox{]} )
+\#define {\bfseries Char\+To\+Base}(c)~( \+\_\+base\+\_\+match\mbox{[}c\mbox{]} )
 \begin{DoxyCompactList}\small\item\em retuns the Base (among enum Base\} that matches character c \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{characters__to__base_8h_a2a350cc3b9ac7baee35b29432230658c}\label{characters__to__base_8h_a2a350cc3b9ac7baee35b29432230658c}} 
-\#define \mbox{\hyperlink{characters__to__base_8h_a2a350cc3b9ac7baee35b29432230658c}{is\+Base}}(c)~( \+\_\+base\+\_\+match\mbox{[}c\mbox{]} != \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a6414b08941ea54b30046706808e5d6c3}{SKIP\+\_\+\+BASE}} )
+\#define {\bfseries is\+Base}(c)~( \+\_\+base\+\_\+match\mbox{[}c\mbox{]} != \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340a6414b08941ea54b30046706808e5d6c3}{SKIP\+\_\+\+BASE}} )
 \begin{DoxyCompactList}\small\item\em retuns 0 iff char c match does not match a base i.\+e. c matches a base which is either known (A,C,G,T,U) or unknown (N) \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{characters__to__base_8h_a95c0ac9e75b926b71d81f15a21a256ef}\label{characters__to__base_8h_a95c0ac9e75b926b71d81f15a21a256ef}} 
-\#define \mbox{\hyperlink{characters__to__base_8h_a95c0ac9e75b926b71d81f15a21a256ef}{is\+Unknown\+Base}}(c)~( \+\_\+base\+\_\+match\mbox{[}c\mbox{]} == \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340ac5e300f157b9edd70bc5e93df509fd49}{UNKOWN\+\_\+\+BASE}} )
+\#define {\bfseries is\+Unknown\+Base}(c)~( \+\_\+base\+\_\+match\mbox{[}c\mbox{]} == \mbox{\hyperlink{characters__to__base_8h_a450696a95d6cb29d7723838846948340ac5e300f157b9edd70bc5e93df509fd49}{UNKOWN\+\_\+\+BASE}} )
 \begin{DoxyCompactList}\small\item\em retuns 0 iff char c match does not match an unknown base (\textquotesingle{}n\textquotesingle{} or \textquotesingle{}N\textquotesingle{}) i.\+e. c matches a base which is A,C,G,T,U \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{characters__to__base_8h_ae93373311093aa3b22eb58190419befe}\label{characters__to__base_8h_ae93373311093aa3b22eb58190419befe}} 
-\#define \mbox{\hyperlink{characters__to__base_8h_ae93373311093aa3b22eb58190419befe}{is\+Same\+Base}}(a,  b)~( \+\_\+base\+\_\+match\mbox{[}a\mbox{]} == \+\_\+base\+\_\+match\mbox{[}b\mbox{]} )
+\#define {\bfseries is\+Same\+Base}(a,  b)~( \+\_\+base\+\_\+match\mbox{[}a\mbox{]} == \+\_\+base\+\_\+match\mbox{[}b\mbox{]} )
 \begin{DoxyCompactList}\small\item\em retuns 0 iff chars a and b are mapped to two different bases \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Enumerations}
 \begin{DoxyCompactItemize}
@@ -72,7 +72,7 @@ Mapping of characters (eg \textquotesingle{}a\textquotesingle{} and \textquotesi
 
 canonical bases 
 
-Bases is the set of canonical bases \{ADENINE, CYTOSINE, GUANINE, THYMINE, URACILE\}~plus two additional constants \+: ~\newline
+Bases is the set of canonical bases \{ADENINE, CYTOSINE, GUANINE, THYMINE, URACILE\} plus two additional constants \+: ~\newline
  UNKOWN\+\_\+\+BASE \+: corresponding to an existing but unknown or erroneous base (represented by \textquotesingle{}N\textquotesingle{} in FASTA file) SKIP\+\_\+\+BASE \+: corresponding to a character in the file that has to be skip (like \textquotesingle{}~\newline
 \textquotesingle{}) / \begin{DoxyEnumFields}{Enumerator}
 \raisebox{\heightof{T}}[0pt][0pt]{\index{SKIP\_BASE@{SKIP\_BASE}!characters\_to\_base.h@{characters\_to\_base.h}}\index{characters\_to\_base.h@{characters\_to\_base.h}!SKIP\_BASE@{SKIP\_BASE}}}\mbox{\Hypertarget{characters__to__base_8h_a450696a95d6cb29d7723838846948340a6414b08941ea54b30046706808e5d6c3}\label{characters__to__base_8h_a450696a95d6cb29d7723838846948340a6414b08941ea54b30046706808e5d6c3}} 

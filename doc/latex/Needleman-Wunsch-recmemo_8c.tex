@@ -19,7 +19,7 @@ struct \mbox{\hyperlink{structNW__MemoContext}{NW\+\_\+\+Memo\+Context}}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\Hypertarget{Needleman-Wunsch-recmemo_8c_aeb8f8334c1df83ec03c75656ba679336}\label{Needleman-Wunsch-recmemo_8c_aeb8f8334c1df83ec03c75656ba679336}} 
-\#define \mbox{\hyperlink{Needleman-Wunsch-recmemo_8c_aeb8f8334c1df83ec03c75656ba679336}{NOT\+\_\+\+YET\+\_\+\+COMPUTED}}~-\/1L
+\#define {\bfseries NOT\+\_\+\+YET\+\_\+\+COMPUTED}~-\/1L
 \begin{DoxyCompactList}\small\item\em default value for memoization of minimal distance (defined as an impossible value for a distance, -\/1). \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
@@ -69,7 +69,7 @@ computes the edit distance between A\mbox{[}0 .. length\+A-\/1\mbox{]} and B\mbo
 \end{DoxyReturn}
 edit\+Distance\+\_\+\+It\+Memo is a memoized recursive immplementatioin of Needleman-\/\+Wunsch algorithm. It allocates the data structure for memoization table and fills in the memoization table.
 
-If lengthA $<$ lengthB, the sequences A and B are swapped.
+If lengthA \texorpdfstring{$<$}{<} lengthB, the sequences A and B are swapped.
 
 
 \begin{DoxyParams}{Parameters}
@@ -87,4 +87,4 @@ If lengthA $<$ lengthB, the sequences A and B are swapped.
 \end{DoxyReturn}
 edit\+Distance\+\_\+\+Rec\+Memo is a memoized recursive immplementatioin of Needleman-\/\+Wunsch algorithm. It allocates the data structure for memoization table and calls the internal recursive function \+\_\+edit\+Distance\+\_\+memo that fills in the memoization table.
 
-If lengthA $<$ lengthB, the sequences A and B are swapped. 
+If lengthA \texorpdfstring{$<$}{<} lengthB, the sequences A and B are swapped. 
