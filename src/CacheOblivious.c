@@ -25,7 +25,7 @@
 
 #define Z 4096
 #define BLOCK_SIZE pow(Z/2, 0.5)
-#define S 20
+#define S 4
 
 /* Context of the memoization : passed to all recursive calls */
 /** \def NOT_YET_COMPUTED
@@ -53,67 +53,80 @@ struct NW_MemoContext
  * \param i : starting position of the left sequence :  c->X[ i .. c->M ] 
  * \param j : starting position of the right sequence :  c->Y[ j .. c->N ] 
  */ 
-static long EditDistance_Rec_CO(struct NW_MemoContext *c, size_t i, size_t j, size_t K1, size_t K2) 
+static long EditDistance_Rec_CO(struct NW_MemoContext *c, size_t begin_1, size_t begin_2, size_t end_1, size_t end_2) 
 /* compute and returns phi(i,j) using data in c -allocated and initialized by EditDistance_NW_Rec */
 {
+    size_t n_1 = end_1 - begin_1;
+    size_t n_2 = end_2 - begin_2;
 
-    if((K1 < S) && (K2<S)) {
-        if (c->memo[i][j] == NOT_YET_COMPUTED)
-        {  
-            long res ;
-            char Xi = c->X[i] ;
-            char Yj = c->Y[j] ;
-            if (i == c->M) /* Reach end of X */
-            {  if (j == c->N) res = 0;  /* Reach end of Y too */
-                else res = (isBase(Yj) ? INSERTION_COST : 0) + c->memo[i][j+1];
-                //+ EditDistance_NW_RecMemo(c, i, j+1) ;
-            }
-            else if (j == c->N) /* Reach end of Y but not end of X */
-            {  res = (isBase(Xi) ? INSERTION_COST : 0) + c->memo[i+1][j];
-                //+ EditDistance_NW_RecMemo(c, i+1, j) ;
-            }
-            else if (! isBase(Xi))  /* skip ccharacter in Xi that is not a base */
-            {  ManageBaseError( Xi ) ;
-                res = EditDistance_Rec_CO(c, i+1, j, K1, K2) ;
-            }
-            else if (! isBase(Yj))  /* skip ccharacter in Yj that is not a base */
-            {  ManageBaseError( Yj ) ;
-                res = EditDistance_Rec_CO(c, i, j+1, K1, K2) ;
-            }
-            else  
-            {  /* Note that stopping conditions (i==M) and (j==N) are already stored in c->memo (cf EditDistance_NW_Rec) */ 
-                long min = /* initialization  with cas 1*/
-                        ( isUnknownBase(Xi) ?  SUBSTITUTION_UNKNOWN_COST 
-                                : ( isSameBase(Xi, Yj) ? 0 : SUBSTITUTION_COST ) 
-                        )
-                        + c->memo[i+1][j+1];
-                        //+ EditDistance_NW_RecMemo(c, i+1, j+1) ; 
-                { long cas2 = INSERTION_COST + c->memo[i+1][j];
-                    //+ EditDistance_NW_RecMemo(c, i+1, j) ;      
-                if (cas2 < min) min = cas2 ;
+    if((n_1<S) && (n_2<S)) {
+
+        // printf("begin1:%d begin2:%d\n", begin_1, begin_2);
+
+        for(int i=end_1; i>=(int)begin_1; i--) {    
+            for(int j=end_2; j>=(int)begin_2; j--) {
+
+                printf("i:%02d | j:%02d | I:%02d | J:%02d | K1:%02d | K2:%02d\n", i,j,begin_1,begin_2,end_1,end_2);
+
+                long res ;
+                char Xi = c->X[i] ;
+                char Yj = c->Y[j] ;
+                if (i == c->M) /* Reach end of X */
+                {  if (j == c->N) res = 0;  /* Reach end of Y too */
+                    else res = (isBase(Yj) ? INSERTION_COST : 0) + c->memo[i][j+1];
+                    //+ EditDistance_NW_RecMemo(c, i, j+1) ;
                 }
-                { long cas3 = INSERTION_COST + c->memo[i][j+1];
-                    //+ EditDistance_NW_RecMemo(c, i, j+1) ;      
-                if (cas3 < min) min = cas3 ; 
+                else if (j == c->N) /* Reach end of Y but not end of X */
+                {  res = (isBase(Xi) ? INSERTION_COST : 0) + c->memo[i+1][j];
+                    //+ EditDistance_NW_RecMemo(c, i+1, j) ;
                 }
-                res = min ;
+                else if (! isBase(Xi))  /* skip ccharacter in Xi that is not a base */
+                {  ManageBaseError( Xi ) ;
+                    res = c->memo[i+1][j];
+                    //res = EditDistance_Rec_CO(c, i+1, j, K1, K2) ;
+                }
+                else if (! isBase(Yj))  /* skip ccharacter in Yj that is not a base */
+                {  ManageBaseError( Yj ) ;
+                    res = c->memo[i][j+1];
+                    // EditDistance_Rec_CO(c, i, j+1, K1, K2) ;
+                }
+                else  
+                {  /* Note that stopping conditions (i==M) and (j==N) are already stored in c->memo (cf EditDistance_NW_Rec) */ 
+                    long min = /* initialization  with cas 1*/
+                            ( isUnknownBase(Xi) ?  SUBSTITUTION_UNKNOWN_COST 
+                                    : ( isSameBase(Xi, Yj) ? 0 : SUBSTITUTION_COST ) 
+                            )
+                            + c->memo[i+1][j+1];
+                            //+ EditDistance_NW_RecMemo(c, i+1, j+1) ; 
+                    { long cas2 = INSERTION_COST + c->memo[i+1][j];
+                        //+ EditDistance_NW_RecMemo(c, i+1, j) ;      
+                    if (cas2 < min) min = cas2 ;
+                    }
+                    { long cas3 = INSERTION_COST + c->memo[i][j+1];
+                        //+ EditDistance_NW_RecMemo(c, i, j+1) ;      
+                    if (cas3 < min) min = cas3 ; 
+                    }
+                    res = min ;
+                }
+                c->memo[i][j] = res;
             }
-            c->memo[i][j] = res;
         }
-
     }
     else {
-        if(K1>K2) {
-            EditDistance_Rec_CO(c, i, j, K1/2, K2);
-            EditDistance_Rec_CO(c, i+K1/2, j, K1 - K1/2, K2);
+        if(n_1>n_2){
+            printf("begin:%d, end:%d\n",begin_1,end_1);
+            EditDistance_Rec_CO(c, begin_1, (begin_1+end_1)/2, begin_2, end_2);
+            EditDistance_Rec_CO(c, (begin_1+end_2)/2, end_1, begin_2, end_2);
         }
         else {
-            EditDistance_Rec_CO(c, i, j, K1, K2/2);
-            EditDistance_Rec_CO(c, i, j+K2/2, K1, K2-K2/2);
+            printf("begin:%d, end:%d\n",begin_2,end_2);
+            EditDistance_Rec_CO(c, begin_1, end_1, begin_2, (begin_2+end_2)/2);
+            EditDistance_Rec_CO(c, begin_1, end_1, (begin_2+end_2)/2, end_2);
         }
+        return;
     }
 
-    return c->memo[i][j] ;
+    return c->memo[0][0];
 }
 
 /* EditDistance_NW_Rec :  is the main function to call, cf .h for specification 
@@ -153,11 +166,9 @@ long EditDistance_CO(char* A, size_t lengthA, char* B, size_t lengthB)
       }
    }    
 
-    size_t K1 = BLOCK_SIZE;
-    size_t K2 = BLOCK_SIZE;
 
    /* Compute phi(0,0) = ctx.memo[0][0] by calling the recursive function EditDistance_NW_RecMemo */
-   long res = EditDistance_Rec_CO( &ctx, 0, 0, K1, K2 ) ;
+   long res = EditDistance_Rec_CO( &ctx, 0, 0, M, N ) ;
     
    { /* Deallocation of ctx.memo */
       for (int i=0; i <= M; ++i) free( ctx.memo[i] ) ;
