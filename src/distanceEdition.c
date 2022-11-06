@@ -46,8 +46,10 @@ EXAMPLE
 
 // #include "Needleman-Wunsch-recmemo.h" // Recursive implementation of NeedlemanWunsch with memoization
 // #include "Needleman-Wunsch-itmemo.h"
-#include "CacheAware.h"
-// #include "CacheOblivious.h"
+// #include "CacheAware.h"
+#include "CacheOblivious.h"
+
+#include "/matieres/4MMAOD6/2022-10-TP-AOD-ADN-Docs-fournis/tp-ADN-distance/srcperf/perfMesure.c"
 
 #include <stdio.h>  
 #include <stdlib.h> 
@@ -182,7 +184,20 @@ int main(int argc, char *argv[])
       }
    } 
 
-   long res = EditDistance_CA(seq[0], length[0], seq[1], length[1]);
+   struct myperf p;
+   perfstart(&p);
+
+   long res = EditDistance_CO(seq[0], length[0], seq[1], length[1]);
+
+   perfstop_and_display(stderr, &p);
+   char out_filename[50];
+   sprintf(out_filename, "exec_%ld_%ld.txt", length[0], length[1]);
+   FILE*out = fopen(out_filename, "w");
+   fprintf(out,
+    " %ld & %ld & ELAPSED TIME: %g & CPU TIME: %g & ENERGY: %g \\\\\n ", length[0], length[1], 
+        p.cumul_elapsed_time, p.cumul_cpuusertime, p.cumul_energy );
+   fclose(out);
+
 
    {  for( int i = 0; i < 2; ++i ) 
       {  if (munmap( mmap_fd[i], (off_t) mmap_length[i]) != 0)  err(1, "munmap") ; 

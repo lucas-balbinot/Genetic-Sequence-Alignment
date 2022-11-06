@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "needleman-wunsch-itmemo.h": "c"
+        "needleman-wunsch-itmemo.h": "c",
+        "cacheaware.h": "c",
+        "sstream": "c",
+        "cacheoblivious.h": "c"
     }
 }

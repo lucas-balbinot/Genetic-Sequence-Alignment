@@ -75,10 +75,10 @@ long EditDistance_CA(char* A, size_t lengthA, char* B, size_t lengthB) {
 
     // divide by the number os bytes that the data type occupies
     // in this case, as char is only 1, this line won't make much effect
-    int Z = SIZE_Z / sizeof(char);
-    int L = SIZE_L / sizeof(char);
+    int Z = SIZE_Z / sizeof(long);
+    int L = SIZE_L / sizeof(long);
     // initialize the block size to sqrt(Z/2)
-    int K = pow(Z/2, 0.5);
+    int K = pow(Z/4,0.5);
 
     for(int i=M; i>=0; i=i-K) {
         int endM = (i-K < 0) ? 0 : i-K;

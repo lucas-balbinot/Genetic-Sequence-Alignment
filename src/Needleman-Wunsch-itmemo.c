@@ -63,9 +63,7 @@ long EditDistance_NW_It(char* A, size_t lengthA, char* B, size_t lengthB) {
         }
     }
 
-    // the evaluation loop
-    // starts in 1 to make sense of the table organization
-    // as the index 0,0 doesn't represent a char
+
     for(int i=M; i>=0; i--) {
         for(int j=N; j>=0; j--) {
 

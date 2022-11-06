@@ -3,7 +3,7 @@ A_TESTER= ../bin/distanceEdition
 DIRTEST= .
 DIRBENCH=/matieres/4MMAOD6/2022-10-TP-AOD-ADN-Docs-fournis/2022-10-TP-AOD-ADN-Benchmark
 
-all: .test1.expected .test2.expected .test3.expected .test4.expected .test5.expected 
+all:  .test1.expected .test2.expected .test3.expected .test4.expected .test5.expected 
 
 all-valgrind: valgrind4perf1000.output valgrind4perf2000.output valgrind4perf10000.output
 

@@ -28,8 +28,8 @@ report: $(PDF)
 doc: $(DOCDIR)/index.html
 
 
-$(BINDIR)/distanceEdition: $(SRCDIR)/distanceEdition.c $(BINDIR)/CacheAware.o
-	$(CC) $(OPT) -I$(SRCDIR) -o $(BINDIR)/distanceEdition $(BINDIR)/CacheAware.o $(SRCDIR)/distanceEdition.c 
+$(BINDIR)/distanceEdition: $(SRCDIR)/distanceEdition.c $(BINDIR)/CacheOblivious.o
+	$(CC) $(OPT) -I$(SRCDIR) -o $(BINDIR)/distanceEdition $(BINDIR)/CacheOblivious.o $(SRCDIR)/distanceEdition.c -lm
 
 $(BINDIR)/Needleman-Wunsch-recmemo.o: $(SRCDIR)/Needleman-Wunsch-recmemo.h $(SRCDIR)/Needleman-Wunsch-recmemo.c $(SRCDIR)/characters_to_base.h
 	$(CC) $(OPT) -I$(SRCDIR) -c  -o $(BINDIR)/Needleman-Wunsch-recmemo.o $(SRCDIR)/Needleman-Wunsch-recmemo.c

@@ -24,8 +24,7 @@
 /*****************************************************************************/
 
 #define Z 4096
-#define BLOCK_SIZE pow(Z/2, 0.5)
-#define S 200
+#define S 30
 
 /* Context of the memoization : passed to all recursive calls */
 /** \def NOT_YET_COMPUTED
@@ -53,18 +52,18 @@ struct NW_MemoContext
  * \param i : starting position of the left sequence :  c->X[ i .. c->M ] 
  * \param j : starting position of the right sequence :  c->Y[ j .. c->N ] 
  */ 
-static long EditDistance_Rec_CO(struct NW_MemoContext *c, size_t begin_1, size_t begin_2, size_t end_1, size_t end_2) 
+static long EditDistance_Rec_CO(struct NW_MemoContext *c, int begin_1, int begin_2, int end_1, int end_2) 
 /* compute and returns phi(i,j) using data in c -allocated and initialized by EditDistance_NW_Rec */
 {
-    size_t n_1 = end_1 - begin_1;
-    size_t n_2 = end_2 - begin_2;
+    int n_1 = end_1 - begin_1;
+    int n_2 = end_2 - begin_2;
 
     if((n_1<S) && (n_2<S)) {
 
         // printf("begin1:%d begin2:%d\n", begin_1, begin_2);
 
-        for(int i=end_1; i>=(int)begin_1; i--) {    
-            for(int j=end_2; j>=(int)begin_2; j--) {
+        for(int i=end_1; i>=begin_1; i--) {    
+            for(int j=end_2; j>=begin_2; j--) {
 
                 // printf("i:%02zu | j:%02zu | I:%02zu | J:%02zu | K1:%02zu | K2:%02zu\n", i,j,begin_1,begin_2,end_1,end_2);
 

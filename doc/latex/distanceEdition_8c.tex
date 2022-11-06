@@ -5,7 +5,8 @@
 compute edit distance between two strings each one being a substring of consecutive characters (eg in a FNA file)  
 
 
-{\ttfamily \#include \char`\"{}Cache\+Aware.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Cache\+Oblivious.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}/matieres/4\+MMAOD6/2022-\/10-\/\+TP-\/\+AOD-\/\+ADN-\/\+Docs-\/fournis/tp-\/\+ADN-\/distance/srcperf/perf\+Mesure.\+c\char`\"{}}\newline
 {\ttfamily \#include $<$stdio.\+h$>$}\newline
 {\ttfamily \#include $<$stdlib.\+h$>$}\newline
 {\ttfamily \#include $<$err.\+h$>$}\newline
@@ -38,11 +39,11 @@ Primitives pour mapper en mémoire virtuelle une sous-\/séquence d\textquotesin
 Jean-\/\+Louis Roch (Ensimag, Grenoble-\/\+INP, University Grenoble-\/\+Alpes) \href{mailto:jean-louis.roch@grenoble-inp.fr}{\texttt{ jean-\/louis.\+roch@grenoble-\/inp.\+fr}} Usage \+: distance\+Edition file1 b1 L1 file2 b2 L2 cf function usage\+\_\+and\+\_\+spec below. NAME distance\+Edition -\/ compute edit distance between two substrings, each from a file SYNOPSIS distance\+Edition file\+\_\+1 b1 L\+\_\+1 file\+\_\+2 b\+\_\+2 L\+\_\+2 DESCRIPTION distance\+Edition computes the edit distance between two arrays of characters array\+\_\+file\+\_\+1\mbox{[}b\+\_\+1, b\+\_\+1+\+L\+\_\+1( and array\+\_\+file2\mbox{[}b\+\_\+2,b\+\_\+2+\+L\+\_\+2( where\+: array\+\_\+F\mbox{[}b,b+L( \+: denotes in file F the sequence of L consecutive characters starting at position b. The progam is designed for direct access to genetic subsequences stored in FASTA format file (.fna) . Execution performs the following actions\+:
 \begin{DoxyEnumerate}
 \item maps file\+\_\+1 in an array array\+\_\+file\+\_\+1 in virtual memory using standard C libray function\+: mmap
-\item prints on stderr if (L\+\_\+1 \texorpdfstring{$<$}{<}= 40) the content of array\+\_\+file\+\_\+1\mbox{[}b\+\_\+1 .. b\+\_\+1+\+L\+\_\+1-\/1\mbox{]} or else the first and last 20 characters of array\+\_\+file\+\_\+1
+\item prints on stderr if (L\+\_\+1 $<$= 40) the content of array\+\_\+file\+\_\+1\mbox{[}b\+\_\+1 .. b\+\_\+1+\+L\+\_\+1-\/1\mbox{]} or else the first and last 20 characters of array\+\_\+file\+\_\+1
 \item if file\+\_\+2 and file\+\_\+1 are the same pathname, than array\+\_\+file\+\_\+2 = array\+\_\+file\+\_\+1; else do for file\+\_\+2 the same as file\+\_\+1 (replacing \+\_\+1 by \+\_\+2 in both previous actions above)
 \item prints on stdout the output (type long) of the following call \+: edit\+Distance( array\+\_\+file\+\_\+1 + b\+\_\+1, L\+\_\+1, array\+\_\+file\+\_\+2, + b\+\_\+2, L\+\_\+2 ) ~\newline
- where the extern C function has prototype \+: edit\+Distance( char$\ast$ A, size\+\_\+t length\+A, char$\ast$ B, size\+\_\+t length\+B); EXIT STATUS The program exits 0 on success, and \texorpdfstring{$>$}{>}0 if an error occurs. EXAMPLE distance\+Edition f1.\+fna 0 5 f2.\+fna 42 7 ~\newline
- where f1.\+fna contains ="{}CAcgT"{} and f2.\+fna contains "{}\texorpdfstring{$<$}{<}cette premiere ligne est un commentaire.\textbackslash{}naca\+CGTACNNNAT"{} ~\newline
+ where the extern C function has prototype \+: edit\+Distance( char$\ast$ A, size\+\_\+t length\+A, char$\ast$ B, size\+\_\+t length\+B); EXIT STATUS The program exits~0 on success, and~$>$0 if an error occurs. EXAMPLE distance\+Edition f1.\+fna 0 5 f2.\+fna 42 7 ~\newline
+ where f1.\+fna contains ="{}CAcgT"{} and f2.\+fna contains "{}$<$cette premiere ligne est un commentaire.\textbackslash{}naca\+CGTACNNNAT"{} ~\newline
 "{} prints the output of edit\+Distance on the two following char arrays \+: \{\textquotesingle{}C\textquotesingle{}, \textquotesingle{}A\textquotesingle{}, \textquotesingle{}c\textquotesingle{}, \textquotesingle{}G\textquotesingle{}, \textquotesingle{}T\textquotesingle{}\} extracted from f1.\+fna \{\textquotesingle{}a\textquotesingle{}, \textquotesingle{}c\textquotesingle{}, \textquotesingle{}a\textquotesingle{}, \textquotesingle{}C\textquotesingle{}, \textquotesingle{}G\textquotesingle{}, \textquotesingle{}T\textquotesingle{}, \textquotesingle{}A\textquotesingle{}\} extracted from f2.\+fna and prints 4 on stdout.
 \end{DoxyEnumerate}
 
